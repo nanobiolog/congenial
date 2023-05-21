@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up</title>
+  </head>
+  <body>
+    <h1>Sign Up</h1>
+    <form id="signupForm">
+      <input type="email" placeholder="Email" id="emailInput">
+      <input type="password" placeholder="Password" id="passwordInput">
+      <button type="submit">Sign Up</button>
+    </form>
+    
+    <!-- Firebase SDK Initialization -->
+    <script src="https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js"></script>
+    <script>
+      // Initialize Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyCnciE3DUCjEV1AZ4GaslLVdgviEq1CAiQ",
+        authDomain: "satilik-1.firebaseapp.com",
+        projectId: "satilik-1",
+        storageBucket: "satilik-1.appspot.com",
+        messagingSenderId: "1044099001352",
+        appId: "1:1044099001352:web:c8052d8686fe3f6909f5bd",
+        measurementId: "G-7ZZ059XBED"
+      };
+      firebase.initializeApp(firebaseConfig);
+
+      // Sign Up Form Submit Event Listener
+      const signupForm = document.getElementById('signupForm');
+      signupForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const email = document.getElementById('emailInput').value;
+        const password = document.getElementById('passwordInput').value;
+
+        // Create User with Email and Password
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+          .then(function(userCredential) {
+            // Email Verification
+            userCredential.user.sendEmailVerification()
+              .then(function() {
+                alert('Email verification sent. Please check your inbox.');
+                // Redirect to Sign In Page
+                window.location.href = 'signin.html';
+              })
+              .catch(function(error) {
+                console.error(error);
+                alert('Failed to send email verification. Please try again.');
+              });
+          })
+          .catch(function(error) {
+            console.error(error);
+            alert('Sign up failed. Please check your credentials.');
+          });
+      });
+    </script>
+  </body>
+</html>
